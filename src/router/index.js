@@ -5,7 +5,7 @@ import Admin from "@/views/admin/index.vue";
 const routes = [
   {
     path: "/consumer",
-    name: "consumerIndex",
+    name: "ConsumerC",
     component: Consumer,
   },
   {

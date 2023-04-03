@@ -1,45 +1,27 @@
 import { defineStore } from "pinia";
 
-export const usePostStore = defineStore({
-  id: "post",
+export const useLayoutStore = defineStore({
+  id: "layoutState",
   state: () => ({
-    posts: [],
-    post: null,
-    loading: false,
-    error: null,
+    layouts: [],
+    indexLayout: 0,
   }),
-  getters: {
-    getPostsPerAuthor: (state) => {
-      return (authorId) =>
-        state.posts.filter((post) => post.userId === authorId);
-    },
-  },
+  getters: {},
   actions: {
-    async fetchPosts() {
-      this.posts = [];
-      this.loading = true;
-      try {
-        this.posts = await fetch(
-          "https://jsonplaceholder.typicode.com/posts"
-        ).then((response) => response.json());
-      } catch (error) {
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+    addLayout(data) {
+      this.layouts = [data, ...this.layouts];
+      this.indexLayout++;
     },
-    async fetchPost(id) {
-      this.post = null;
-      this.loading = true;
-      try {
-        this.post = await fetch(
-          `https://jsonplaceholder.typicode.com/posts/${id}`
-        ).then((response) => response.json());
-      } catch (error) {
-        this.error = error;
-      } finally {
-        this.loading = false;
-      }
+    async saveLayout() {
+      this.layouts = [...this.layouts];
+      await localStorage.clear();
+      await localStorage.setItem("data", JSON.stringify(this.layouts));
+      alert("success");
+    },
+    viewLayout() {
+      this.layouts.length > 0
+        ? window.open("/consumer", "_blank")
+        : alert("layout not found");
     },
   },
 });
